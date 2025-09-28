@@ -71,6 +71,8 @@ func start() {
 		name:   "1xjack1x2",
 		status: 0,
 	}
+
+	sendMessage("Empezando, revisando status de los jugadores cada 1 minuto. En caso de cambiar, se avisara. El valor por defecto de todos = Offline, hasta ahora nadie esta conectado")
 }
 
 func notifyChangeUserStatus(user *UserDetails) {
