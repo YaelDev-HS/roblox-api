@@ -4,15 +4,14 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 func main() {
 	mux := http.NewServeMux()
 
 	start()
-
-	// Handlers
-	mux.HandleFunc("/", getUsers)
+	go executeForMinute()
 
 	port := os.Getenv("PORT")
 
@@ -24,4 +23,11 @@ func main() {
 	log.Println("PORT from env:", os.Getenv("PORT"))
 
 	http.ListenAndServe(":"+port, mux)
+}
+
+func executeForMinute() {
+	for {
+		getUsers()
+		time.Sleep(time.Minute * 1)
+	}
 }

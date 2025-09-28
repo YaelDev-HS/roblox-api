@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 )
 
 const apiRobloxUrl string = "https://presence.roblox.com/v1/presence/users"
@@ -42,7 +43,7 @@ var memoUsers map[int64]UserDetails = make(map[int64]UserDetails)
 // }
 
 func start() {
-	memoUsers[9158091036] = UserDetails{
+	memoUsers[9385162663] = UserDetails{
 		name:   "SlayerRed_X",
 		status: 0,
 	}
@@ -73,16 +74,22 @@ func start() {
 }
 
 func notifyChangeUserStatus(user *UserDetails) {
-	log.Println("El usuario = " + user.name + " ha cambiado de status")
+	var message string = "El usuario \"" + user.name + "\" ha cambiado de status hacia: "
 
 	switch user.status {
 	case 1:
-		log.Println("Esta activo")
+		message += "No esta jugando pero esta AFK en la aplicacion de roblox"
 	case 2:
-		log.Println("Esta en Roblox Studio")
+		message += "Acaba de entrar a jugar!!!"
+	case 3:
+		message += "Esta en roblox studio"
 	case 0:
-		log.Println("Se ha desconectado del juego")
+		message += "se ha desconectado"
 	}
+
+	message += " - fecha = " + time.DateTime
+
+	sendMessage(message)
 }
 
 func handleChangeUserStatus(user RobloxUser) {
@@ -109,12 +116,7 @@ func handleUsersStatus(body ResponseBody) {
 	}
 }
 
-func getUsers(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
+func getUsers() {
 	body := RequestBody{
 		UserIds: []int64{},
 	}
@@ -126,14 +128,14 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	jsonBody, err := json.Marshal(body)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("Error inesperado: %s\n", err)
 		return
 	}
 
 	res, err := http.Post(apiRobloxUrl, "application/json", bytes.NewBuffer(jsonBody))
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("Error en solicitar la respuesta del body = %s\n", err)
 		return
 	}
 
@@ -143,11 +145,8 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 
 	err = json.NewDecoder(res.Body).Decode(&responseData)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	handleUsersStatus(responseData)
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("Success!!!"))
 }
