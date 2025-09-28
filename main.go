@@ -9,6 +9,8 @@ import (
 func main() {
 	mux := http.NewServeMux()
 
+	start()
+
 	// Handlers
 	mux.HandleFunc("/", getUsers)
 
