@@ -8,15 +8,18 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	port := os.Getenv("PORT")
 
+	// Handlers
 	mux.HandleFunc("/", getUsers)
+
+	port := os.Getenv("PORT")
 
 	if port == "" {
 		port = "8080"
 	}
 
-	log.Println("Server running on http://localhost:" + port)
+	log.Println("Server running on port " + port)
+	log.Println("PORT from env:", os.Getenv("PORT"))
 
 	http.ListenAndServe(":"+port, mux)
 }
