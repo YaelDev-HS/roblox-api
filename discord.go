@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-const url string = "https://discord.com/api/webhooks/1421703040477696152/zOXt2mY0fXifUmUprOc1SfNsQ4WE90vPySqD_W5wlM-1HAvwTsEKkxzY5oICkHr5HGI1"
+const url string = "https://discord.com/api/webhooks/1422026393910251571/1Ute0tXo-yuS7zEH4_8uv7ZpO4BShhrIzuDue9dcgz7PXCZR3Qyeg_1MIddoU_F9vPq9"
 
 func sendMessage(msg string) {
 	payload := map[string]string{"content": msg}
