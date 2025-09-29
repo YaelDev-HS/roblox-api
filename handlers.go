@@ -47,6 +47,10 @@ func start() {
 		name:   "SlayerRed_X",
 		status: 0,
 	}
+	memoUsers[8014173878] = UserDetails{
+		name:   "Werner Heisenberg",
+		status: 0,
+	}
 	memoUsers[1021391066] = UserDetails{
 		name:   "132SleepingBeauty",
 		status: 0,
@@ -89,7 +93,7 @@ func notifyChangeUserStatus(user *UserDetails) {
 		message += "se ha desconectado"
 	}
 
-	message += " - fecha = " + time.DateTime
+	message += " - fecha = " + time.Now().Format("2006-01-02 15:04:05")
 
 	sendMessage(message)
 }
